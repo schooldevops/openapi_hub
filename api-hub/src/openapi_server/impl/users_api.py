@@ -99,10 +99,17 @@ class UsersApiImpl(BaseUsersApi):
         Raises:
             HTTPException: 사용자가 존재하지 않을 경우
         """
-        if user_id not in users_db:
-            raise HTTPException(status_code=404, detail=f"User with ID {user_id} not found")
-        
-        return users_db[user_id]
+        # DatabaseSessionManager를 사용하여 데이터베이스 세션 생성
+        with DatabaseSessionManager() as db:
+            # 데이터베이스에서 사용자 조회
+            user_db = db.query(UsersDB).filter(UsersDB.id == user_id).first()
+            
+            # 사용자가 존재하지 않으면 404 에러 발생
+            if user_db is None:
+                raise HTTPException(status_code=404, detail=f"User with ID {user_id} not found")
+            
+            # 조회된 사용자 정보 반환
+            return user_db.toUser()
 
     async def users_user_id_put(self, user_id: int, user: User) -> User:
         """
@@ -118,13 +125,31 @@ class UsersApiImpl(BaseUsersApi):
         Raises:
             HTTPException: 사용자가 존재하지 않을 경우
         """
-        if user_id not in users_db:
-            raise HTTPException(status_code=404, detail=f"User with ID {user_id} not found")
-        
-        # ID 일관성 유지
-        user.id = user_id
-        users_db[user_id] = user
-        return user
+        # DatabaseSessionManager를 사용하여 데이터베이스 세션 생성
+        with DatabaseSessionManager() as db:
+            # 데이터베이스에서 사용자 조회
+            user_db = db.query(UsersDB).filter(UsersDB.id == user_id).first()
+            
+            # 사용자가 존재하지 않으면 404 에러 발생
+            if user_db is None:
+                raise HTTPException(status_code=404, detail=f"User with ID {user_id} not found")
+            
+            # 사용자 정보 업데이트
+            user_db.email = user.email if user.email else user_db.email
+            user_db.full_name = user.full_name if user.full_name else user_db.full_name
+            
+            # 비밀번호가 제공된 경우 해시하여 저장
+            if user.password:
+                user_db.password_hash = (user.password)
+                
+            user_db.updated_at = datetime.now()
+            
+            # 변경사항 커밋
+            db.commit()
+            db.refresh(user_db)
+            
+            # 업데이트된 사용자 정보 반환
+            return user_db.toUser()
 
     async def users_user_id_delete(self, user_id: int) -> None:
         """
@@ -136,8 +161,17 @@ class UsersApiImpl(BaseUsersApi):
         Raises:
             HTTPException: 사용자가 존재하지 않을 경우
         """
-        if user_id not in users_db:
-            raise HTTPException(status_code=404, detail=f"User with ID {user_id} not found")
-        
-        # 사용자 삭제
-        del users_db[user_id]
+        # DatabaseSessionManager를 사용하여 데이터베이스 세션 생성
+        with DatabaseSessionManager() as db:
+            # 데이터베이스에서 사용자 조회
+            user_db = db.query(UsersDB).filter(UsersDB.id == user_id).first()
+            
+            # 사용자가 존재하지 않으면 404 에러 발생
+            if user_db is None:
+                raise HTTPException(status_code=404, detail=f"User with ID {user_id} not found")
+            
+            # 사용자 삭제
+            db.delete(user_db)
+            
+            # 변경사항 커밋
+            db.commit()
