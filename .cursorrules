@@ -1,0 +1,45 @@
+1. 테스트코드:
+    - 모든 코드는 테스트 코드를 작성하고, 비즈니스 로직을 작성해야한다. 
+    - 테스트 코드를 실행하는 방법은 코드 생성이후 반드시 실행할 수 있는 명령을 제시한다. 
+    - 테스트 코드를 작성할 때에는 각 언어의 대표적인 테스트 코드를 작성한다. (예) Java - JUnit, Python - pytest
+    
+2. 간단하게 유지:
+   - 가독성과 유지보수를 우선시합니다.
+   - 해결책을 과도하게 설계하지 않습니다.
+   - 가능한 경우 표준 라이브러리 및 패턴을 사용합니다.
+   - 코드는 리팩토링 된 형태로 개발이 되어야한다. 즉, 테스트코드와 얼라인되어 간결하고 하나의 일을 하는 코드가 될 수 있도록 작성되어야한다. 
+
+3. 코드 변경:
+   - 변경 사항을 제안하기 전에 명확한 계획을 세웁니다.
+   - 한 파일에 모든 수정을 적용합니다.
+   - 관련이 없는 파일은 수정하지 않습니다.
+
+4. 버그 수정:
+   - 문제를 철저히 분석한 후 수정 제안을 합니다.
+   - 정밀하고 타겟이 된 해결책을 제공합니다.
+   - 버그의 근본 원인을 설명합니다.
+
+5. 코드 주석 
+    - 코드는 커멘트에 주석을 빼라라는 명령이 없으면 모든 코드에 주석을 달아야한다. 
+    - 주석은 코드의 설명을 달아야한다. 
+    - 주석은 코드의 각 문법에 대한 설명을 달아야한다. 
+    - 주석은 코드의 로직에 대한 설명을 달아야한다. 
+    - 주석은 코드의 모든 부분에 달아야한다. 
+    - 주석은 코드의 모든 부분에 달아야한다. 
+
+6. 사용 프로그래밍
+    - 서버 프로그램은 FastAPI를 사용한다.
+    - 그리고 반드시 open api spec를 우선 작성하고, 이를 이용하여 서버코드를 생성한 후 비즈니스 로직이 작성 되어야한다. 
+    - 프론트 프로그램은 Vue.js + Nuxt.js + typescript 을 사용한다. 
+    - 프런트 와 서버의 API 통신은 open api spec을 이용하여 프론트 코드를 생성한 후 비즈니스 로직이 작성 되어야한다. 
+    - 화면 UI/UX는 tailwindcss를 사용한다. 
+
+7. 관련 레퍼런스
+    - open api spec 레퍼런스: https://spec.openapis.org/oas/latest.html
+    - fastapi 레퍼런스: https://fastapi.tiangolo.com/
+    - vue.js 레퍼런스: https://vuejs.org/guide/introduction.html
+    - nuxt.js 레퍼런스: https://nuxt.com/docs/getting-started/introduction
+    - tailwindcss 레퍼런스: https://tailwindcss.com/docs/installation/using-vite
+    - typescript 레퍼런스: https://www.typescriptlang.org/docs/
+
+

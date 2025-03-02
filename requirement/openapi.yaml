@@ -1,0 +1,704 @@
+openapi: 3.1.0
+info:
+  title: Open API Hub API
+  version: 1.0.0
+  description: API specification for Open API Hub project. This API is designed to manage users, projects, project members, API specifications, and project credentials.
+
+servers:
+  - url: http://localhost:8000
+    description: Development server
+
+tags:
+  - name: Users
+    description: Operations related to users. This includes creating, updating, and deleting users, as well as retrieving user details.
+  - name: Projects
+    description: Operations related to projects. This includes creating, updating, and deleting projects, as well as retrieving project details.
+  - name: Project Members
+    description: Operations related to project members. This includes adding, updating, and deleting project members, as well as retrieving project member details.
+  - name: API Specs
+    description: Operations related to API specifications. This includes creating, updating, and deleting API specifications, as well as retrieving API specification details.
+  - name: Project Credentials
+    description: Operations related to project credentials. This includes creating, updating, and deleting project credentials, as well as retrieving project credential details.
+
+paths:
+  /users:
+    get:
+      tags:
+        - Users
+      summary: Get all users
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '404':
+          description: Users not found
+
+    post:
+      tags:
+        - Users
+      summary: Create new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid input
+
+  /users/{user_id}:
+    get:
+      tags:
+        - Users
+      summary: Get user by ID
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the user to retrieve
+      responses:
+        '200':
+          description: User details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+
+    put:
+      tags:
+        - Users
+      summary: Update user
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the user to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid input
+
+    delete:
+      tags:
+        - Users
+      summary: Delete user
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the user to delete
+      responses:
+        '204':
+          description: User deleted successfully
+        '404':
+          description: User not found
+
+  /projects:
+    get:
+      tags:
+        - Projects
+      summary: Get all projects
+      responses:
+        '200':
+          description: List of projects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Project'
+        '404':
+          description: Projects not found
+
+    post:
+      tags:
+        - Projects
+      summary: Create new project
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Project'
+      responses:
+        '201':
+          description: Project created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '400':
+          description: Invalid input
+
+  /projects/{project_id}:
+    get:
+      tags:
+        - Projects
+      summary: Get project by ID
+      parameters:
+        - in: path
+          name: project_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the project to retrieve
+      responses:
+        '200':
+          description: Project details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '404':
+          description: Project not found
+
+    put:
+      tags:
+        - Projects
+      summary: Update project
+      parameters:
+        - in: path
+          name: project_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the project to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Project'
+      responses:
+        '200':
+          description: Project updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '400':
+          description: Invalid input
+
+    delete:
+      tags:
+        - Projects
+      summary: Delete project
+      parameters:
+        - in: path
+          name: project_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the project to delete
+      responses:
+        '204':
+          description: Project deleted successfully
+        '404':
+          description: Project not found
+
+  /project_members:
+    get:
+      tags:
+        - Project Members
+      summary: Get all project members
+      responses:
+        '200':
+          description: List of project members
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectMember'
+        '404':
+          description: Project members not found
+
+    post:
+      tags:
+        - Project Members
+      summary: Add new project member
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectMember'
+      responses:
+        '201':
+          description: Project member added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectMember'
+        '400':
+          description: Invalid input
+
+  /project_members/{project_member_id}:
+    get:
+      tags:
+        - Project Members
+      summary: Get project member by ID
+      parameters:
+        - in: path
+          name: project_member_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the project member to retrieve
+      responses:
+        '200':
+          description: Project member details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectMember'
+        '404':
+          description: Project member not found
+
+    put:
+      tags:
+        - Project Members
+      summary: Update project member
+      parameters:
+        - in: path
+          name: project_member_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the project member to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectMember'
+      responses:
+        '200':
+          description: Project member updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectMember'
+        '400':
+          description: Invalid input
+
+    delete:
+      tags:
+        - Project Members
+      summary: Delete project member
+      parameters:
+        - in: path
+          name: project_member_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the project member to delete
+      responses:
+        '204':
+          description: Project member deleted successfully
+        '404':
+          description: Project member not found
+
+  /api_specs:
+    get:
+      tags:
+        - API Specs
+      summary: Get all API specifications
+      responses:
+        '200':
+          description: List of API specifications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/APISpec'
+        '404':
+          description: API specifications not found
+
+    post:
+      tags:
+        - API Specs
+      summary: Create new API specification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/APISpec'
+      responses:
+        '201':
+          description: API specification created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APISpec'
+        '400':
+          description: Invalid input
+
+  /api_specs/{api_spec_id}:
+    get:
+      tags:
+        - API Specs
+      summary: Get API specification by ID
+      parameters:
+        - in: path
+          name: api_spec_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the API specification to retrieve
+      responses:
+        '200':
+          description: API specification details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APISpec'
+        '404':
+          description: API specification not found
+
+    put:
+      tags:
+        - API Specs
+      summary: Update API specification
+      parameters:
+        - in: path
+          name: api_spec_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the API specification to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/APISpec'
+      responses:
+        '200':
+          description: API specification updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APISpec'
+        '400':
+          description: Invalid input
+
+    delete:
+      tags:
+        - API Specs
+      summary: Delete API specification
+      parameters:
+        - in: path
+          name: api_spec_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the API specification to delete
+      responses:
+        '204':
+          description: API specification deleted successfully
+        '404':
+          description: API specification not found
+
+  /project_credentials:
+    get:
+      tags:
+        - Project Credentials
+      summary: Get all project credentials
+      responses:
+        '200':
+          description: List of project credentials
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectCredential'
+        '404':
+          description: Project credentials not found
+
+    post:
+      tags:
+        - Project Credentials
+      summary: Create new project credential
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectCredential'
+      responses:
+        '201':
+          description: Project credential created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectCredential'
+        '400':
+          description: Invalid input
+
+  /project_credentials/{project_credential_id}:
+    get:
+      tags:
+        - Project Credentials
+      summary: Get project credential by ID
+      parameters:
+        - in: path
+          name: project_credential_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the project credential to retrieve
+      responses:
+        '200':
+          description: Project credential details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectCredential'
+        '404':
+          description: Project credential not found
+
+    put:
+      tags:
+        - Project Credentials
+      summary: Update project credential
+      parameters:
+        - in: path
+          name: project_credential_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the project credential to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectCredential'
+      responses:
+        '200':
+          description: Project credential updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectCredential'
+        '400':
+          description: Invalid input
+
+    delete:
+      tags:
+        - Project Credentials
+      summary: Delete project credential
+      parameters:
+        - in: path
+          name: project_credential_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the project credential to delete
+      responses:
+        '204':
+          description: Project credential deleted successfully
+        '404':
+          description: Project credential not found
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the user.
+          example: 1
+        email:
+          type: string
+          description: The email address of the user.
+          example: user@example.com
+        password:
+          type: string
+          description: The password of the user.
+          example: password
+        full_name:
+          type: string
+          description: The full name of the user.
+          example: John Doe
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the user was created.
+          example: 2022-01-01T00:00:00Z
+
+    Project:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the project.
+          example: 1
+        name:
+          type: string
+          description: The name of the project.
+          example: Example Project
+        description:
+          type: string
+          description: The description of the project.
+          example: This is an example project.
+        is_archived:
+          type: boolean
+          description: Indicates whether the project is archived.
+          example: false
+        created_by:
+          type: integer
+          description: The unique identifier of the user who created the project.
+          example: 1
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the project was created.
+          example: 2022-01-01T00:00:00Z
+
+    ProjectMember:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the project member.
+          example: 1
+        project_id:
+          type: integer
+          description: The unique identifier of the project to which the member belongs.
+          example: 1
+        user_id:
+          type: integer
+          description: The unique identifier of the user who is a member of the project.
+          example: 1
+        member_role:
+          type: string
+          description: The role of the member in the project.
+          example: admin
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the project member was created.
+          example: 2022-01-01T00:00:00Z
+
+    APISpec:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the API specification.
+          example: 1
+        project_id:
+          type: integer
+          description: The unique identifier of the project to which the API specification belongs.
+          example: 1
+        version:
+          type: string
+          description: The version of the API specification.
+          example: 1.0.0
+        title:
+          type: string
+          description: The title of the API specification.
+          example: Example API Specification
+        description:
+          type: string
+          description: The description of the API specification.
+          example: This is an example API specification.
+        spec_content:
+          type: string
+          format: json
+          description: The content of the API specification in JSON format.
+          example: {}
+        is_archived:
+          type: boolean
+          description: Indicates whether the API specification is archived.
+          example: false
+        access_role:
+          type: string
+          description: The role required to access the API.
+          example: admin
+        created_by:
+          type: integer
+          description: The unique identifier of the user who created the API specification.
+          example: 1
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the API specification was created.
+          example: 2022-01-01T00:00:00Z
+
+    ProjectCredential:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the project credential.
+          example: 1
+        project_id:
+          type: integer
+          description: The unique identifier of the project to which the credential belongs.
+          example: 1
+        api_key:
+          type: string
+          description: The API key for the project credential.
+          example: example_api_key
+        api_secret:
+          type: string
+          description: The API secret for the project credential.
+          example: example_api_secret
+        created_by:
+          type: integer
+          description: The unique identifier of the user who created the project credential.
+          example: 1
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the project credential was created.
+          example: 2022-01-01T00:00:00Z
+        expires_at:
+          type: string
+          format: date-time
+          description: The date and time when the project credential expires.
+          example: 2023-01-01T00:00:00Z
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
