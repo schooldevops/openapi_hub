@@ -4,7 +4,7 @@ from typing import List, Dict, Any
 from api_hub.apis.projects_api_base import BaseProjectsApi
 from api_hub.models.project import Project
 from fastapi import Depends, HTTPException
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, relationship
 from api_hub.db.database import DatabaseSessionManager, get_db, Base
 
 from datetime import datetime
@@ -25,6 +25,9 @@ class ProjectDB(declarative_base()):
     created_at = Column(DateTime, default=datetime.now, nullable=False, comment='프로젝트 생성일')
     updated_by = Column(BigInteger, comment='프로젝트 수정자 아이디')
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now, comment='프로젝트 수정일')
+
+    # creator = relationship("UserDB", foreign_keys=[created_by])
+    # updator = relationship("UserDB", foreign_keys=[updated_by])
 
     def toProject(self):
         """

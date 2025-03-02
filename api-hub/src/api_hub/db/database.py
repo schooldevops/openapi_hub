@@ -98,8 +98,11 @@ def init_db() -> None:
             init_db()
     """
     try:
+        for table in reversed(Base.metadata.sorted_tables):
+            if not engine.dialect.has_table(engine.connect(), table.name):
+                table.create(engine)
         # 모든 모델의 테이블 생성
-        Base.metadata.create_all(bind=engine)
+        # Base.metadata.create_all(bind=engine)
         print("Successfully initialized database.")
     except Exception as e:
         print(f"Failed to initialize database: {e}")

@@ -23,6 +23,9 @@ import json
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, func
+
+from sqlalchemy.orm import relationship
 try:
     from typing import Self
 except ImportError:
@@ -47,6 +50,7 @@ class Project(BaseModel):
         "validate_assignment": True,
         "protected_namespaces": (),
     }
+
 
 
     def to_str(self) -> str:
