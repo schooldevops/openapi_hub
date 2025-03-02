@@ -38,7 +38,9 @@ class Project(BaseModel):
     is_archived: Optional[StrictBool] = Field(default=None, description="Indicates whether the project is archived.")
     created_by: Optional[StrictInt] = Field(default=None, description="The unique identifier of the user who created the project.")
     created_at: Optional[datetime] = Field(default=None, description="The date and time when the project was created.")
-    __properties: ClassVar[List[str]] = ["id", "name", "description", "is_archived", "created_by", "created_at"]
+    updated_by: Optional[StrictInt] = Field(default=None, description="The unique identifier of the user who updated the project.")
+    updated_at: Optional[datetime] = Field(default=None, description="The date and time when the project was updated.")
+    __properties: ClassVar[List[str]] = ["id", "name", "description", "is_archived", "created_by", "created_at", "updated_by", "updated_at"]
 
     model_config = {
         "populate_by_name": True,
