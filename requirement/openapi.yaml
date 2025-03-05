@@ -674,6 +674,10 @@ components:
           type: integer
           description: The unique identifier of the project to which the credential belongs.
           example: 1
+        api_key_name:
+          type: string
+          description: The name of the API key for the project credential.
+          example: example_api_key_name
         api_key:
           type: string
           description: The API key for the project credential.

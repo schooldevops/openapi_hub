@@ -734,6 +734,7 @@ components:
         created_at: 2022-01-01T00:00:00Z
         id: 1
         created_by: 1
+        api_key_name: example_api_key_name
         api_secret: example_api_secret
       properties:
         id:
@@ -747,6 +748,11 @@ components:
           example: 1
           title: project_id
           type: integer
+        api_key_name:
+          description: The name of the API key for the project credential.
+          example: example_api_key_name
+          title: api_key_name
+          type: string
         api_key:
           description: The API key for the project credential.
           example: example_api_key

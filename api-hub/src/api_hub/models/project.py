@@ -23,9 +23,6 @@ import json
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, func
-
-from sqlalchemy.orm import relationship
 try:
     from typing import Self
 except ImportError:
@@ -41,16 +38,13 @@ class Project(BaseModel):
     is_archived: Optional[StrictBool] = Field(default=None, description="Indicates whether the project is archived.")
     created_by: Optional[StrictInt] = Field(default=None, description="The unique identifier of the user who created the project.")
     created_at: Optional[datetime] = Field(default=None, description="The date and time when the project was created.")
-    updated_by: Optional[StrictInt] = Field(default=None, description="The unique identifier of the user who updated the project.")
-    updated_at: Optional[datetime] = Field(default=None, description="The date and time when the project was updated.")
-    __properties: ClassVar[List[str]] = ["id", "name", "description", "is_archived", "created_by", "created_at", "updated_by", "updated_at"]
+    __properties: ClassVar[List[str]] = ["id", "name", "description", "is_archived", "created_by", "created_at"]
 
     model_config = {
         "populate_by_name": True,
         "validate_assignment": True,
         "protected_namespaces": (),
     }
-
 
 
     def to_str(self) -> str:

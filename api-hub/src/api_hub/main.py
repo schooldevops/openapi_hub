@@ -19,17 +19,12 @@ from api_hub.apis.project_credentials_api import router as ProjectCredentialsApi
 from api_hub.apis.project_members_api import router as ProjectMembersApiRouter
 from api_hub.apis.projects_api import router as ProjectsApiRouter
 from api_hub.apis.users_api import router as UsersApiRouter
-from api_hub.db.database import init_db
 
 app = FastAPI(
     title="Open API Hub API",
     description="API specification for Open API Hub project. This API is designed to manage users, projects, project members, API specifications, and project credentials.",
     version="1.0.0",
 )
-
-@app.on_event("startup")
-async def startup_event():
-    init_db()
 
 app.include_router(APISpecsApiRouter)
 app.include_router(ProjectCredentialsApiRouter)

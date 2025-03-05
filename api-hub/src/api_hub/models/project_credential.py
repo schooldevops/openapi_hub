@@ -34,12 +34,13 @@ class ProjectCredential(BaseModel):
     """ # noqa: E501
     id: Optional[StrictInt] = Field(default=None, description="The unique identifier for the project credential.")
     project_id: Optional[StrictInt] = Field(default=None, description="The unique identifier of the project to which the credential belongs.")
+    api_key_name: Optional[StrictStr] = Field(default=None, description="The name of the API key for the project credential.")
     api_key: Optional[StrictStr] = Field(default=None, description="The API key for the project credential.")
     api_secret: Optional[StrictStr] = Field(default=None, description="The API secret for the project credential.")
     created_by: Optional[StrictInt] = Field(default=None, description="The unique identifier of the user who created the project credential.")
     created_at: Optional[datetime] = Field(default=None, description="The date and time when the project credential was created.")
     expires_at: Optional[datetime] = Field(default=None, description="The date and time when the project credential expires.")
-    __properties: ClassVar[List[str]] = ["id", "project_id", "api_key", "api_secret", "created_by", "created_at", "expires_at"]
+    __properties: ClassVar[List[str]] = ["id", "project_id", "api_key_name", "api_key", "api_secret", "created_by", "created_at", "expires_at"]
 
     model_config = {
         "populate_by_name": True,
@@ -92,6 +93,7 @@ class ProjectCredential(BaseModel):
         _obj = cls.model_validate({
             "id": obj.get("id"),
             "project_id": obj.get("project_id"),
+            "api_key_name": obj.get("api_key_name"),
             "api_key": obj.get("api_key"),
             "api_secret": obj.get("api_secret"),
             "created_by": obj.get("created_by"),

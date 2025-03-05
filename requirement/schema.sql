@@ -56,6 +56,7 @@ DROP TABLE IF EXISTS project_credentials;
 CREATE TABLE project_credentials (
     id BIGINT AUTO_INCREMENT PRIMARY KEY comment '프로젝트 Credential 아이디',
     project_id BIGINT comment '프로젝트 아이디',
+    api_key_name VARCHAR(255) NOT NULL comment 'API 키 이름',
     api_key VARCHAR(255) NOT NULL comment 'API 키',
     api_secret VARCHAR(255) NOT NULL comment 'API 시크릿',
     created_by BIGINT comment 'API 문서 생성자 아이디',
