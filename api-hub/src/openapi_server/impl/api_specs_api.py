@@ -10,6 +10,8 @@ from api_hub.db.database import DatabaseSessionManager, get_db, Base
 from datetime import datetime
 from sqlalchemy import Column, Integer, String, Text, DateTime, Boolean, BigInteger, JSON
 from sqlalchemy.ext.declarative import declarative_base
+import json
+from openapi_server.utils.util import safe_json_dumps, parse_json_content
 
 class APISpecDB(declarative_base()):
     """
@@ -37,13 +39,18 @@ class APISpecDB(declarative_base()):
         Returns:
             APISpec: API 모델 객체
         """
+        # 저장된 spec_content는 JSON 문자열이므로 파싱
+        parsed_content = parse_json_content(self.spec_content)
+        
+        print("---------------:::", self.spec_content)
+
         return APISpec(
             id=self.id,
             project_id=self.project_id,
             version=self.version,
             title=self.title,
             description=self.description,
-            spec_content=self.spec_content,
+            spec_content=parsed_content,
             is_archived=self.is_archived,
             access_role=self.access_role,
             created_by=self.created_by,
@@ -58,6 +65,8 @@ class APISpecDB(declarative_base()):
         Returns:
             APISpec: API 모델 객체
         """ 
+
+        print("---------------:::", api_spec)
         return APISpecDB(
             project_id=api_spec.project_id,
             version=api_spec.version,
@@ -100,14 +109,18 @@ class APISpecsApiImpl(BaseAPISpecsApi):
         Returns:
             APISpec: 생성된 API 스펙 정보
         """
+        print("--------------- 1111 :::", api_spec)
         with DatabaseSessionManager() as db:
+            # spec_content를 JSON 형식으로 변환 (유틸리티 함수 사용)
+            spec_content = safe_json_dumps(api_spec.spec_content)
+
             # 새 API 스펙 객체 생성
             new_api_spec_db = APISpecDB(
                 project_id=api_spec.project_id,
                 version=api_spec.version,
                 title=api_spec.title,
                 description=api_spec.description,
-                spec_content=api_spec.spec_content,
+                spec_content=spec_content,  # JSON 문자열로 변환된 content
                 is_archived=False,
                 access_role=api_spec.access_role,
                 created_by=api_spec.created_by,
@@ -181,7 +194,11 @@ class APISpecsApiImpl(BaseAPISpecsApi):
             api_spec_db.version = api_spec.version if api_spec.version else api_spec_db.version
             api_spec_db.title = api_spec.title if api_spec.title else api_spec_db.title
             api_spec_db.description = api_spec.description if api_spec.description is not None else api_spec_db.description
-            api_spec_db.spec_content = api_spec.spec_content if api_spec.spec_content is not None else api_spec_db.spec_content
+            
+            # spec_content가 제공된 경우 JSON 형식으로 변환하여 저장
+            if api_spec.spec_content is not None:
+                api_spec_db.spec_content = safe_json_dumps(api_spec.spec_content)
+                
             api_spec_db.access_role = api_spec.access_role if api_spec.access_role is not None else api_spec_db.access_role
             api_spec_db.updated_by = api_spec.updated_by if api_spec.updated_by else api_spec_db.updated_by
             api_spec_db.updated_at = datetime.now()

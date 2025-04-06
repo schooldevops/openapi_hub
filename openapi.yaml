@@ -1,0 +1,243 @@
+openapi: 3.0.0
+info:
+  title: Streetlight BFF Service
+  version: 1.0.0
+  description: |
+    Backend for Frontend service for managing streetlights with seasonal time-based control
+    계절별 시간 기반 가로등 제어를 위한 Backend for Frontend 서비스
+
+servers:
+  - url: http://localhost:8000
+    description: Local development server
+
+paths:
+  /auth/login:
+    post:
+      summary: User authentication
+      description: Authenticate user and return access token
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Successful authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Authentication failed
+
+  /projects:
+    post:
+      summary: Register new project with user information
+      description: Create a new project and register user information
+      operationId: createProject
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectRegistrationRequest'
+      responses:
+        '201':
+          description: Project successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectResponse'
+        '400':
+          description: Invalid request data
+        '409':
+          description: Project or user already exists
+
+    get:
+      summary: Get all projects
+      description: Retrieve all registered projects
+      operationId: getProjects
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: List of projects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectResponse'
+
+  /streetlights/{streetlightId}/status:
+    get:
+      summary: Get streetlight status
+      description: Get current status of a specific streetlight
+      operationId: getStreetlightStatus
+      parameters:
+        - name: streetlightId
+          in: path
+          required: true
+          schema:
+            type: string
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StreetlightStatus'
+
+  /streetlights/schedule:
+    post:
+      summary: Update streetlight schedule
+      description: Update seasonal schedule for streetlight operation
+      operationId: updateSchedule
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScheduleRequest'
+      responses:
+        '200':
+          description: Schedule updated successfully
+        '400':
+          description: Invalid schedule parameters
+
+components:
+  schemas:
+    LoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      required:
+        - username
+        - password
+
+    LoginResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+        token_type:
+          type: string
+          example: "bearer"
+
+    ProjectRegistrationRequest:
+      type: object
+      properties:
+        project:
+          type: object
+          properties:
+            name:
+              type: string
+              description: Project name
+            description:
+              type: string
+              description: Project description
+            location:
+              type: string
+              description: Project location
+          required:
+            - name
+            - location
+        user:
+          type: object
+          properties:
+            username:
+              type: string
+              description: Username for login
+            password:
+              type: string
+              description: User password
+            email:
+              type: string
+              format: email
+              description: User email
+            fullName:
+              type: string
+              description: User's full name
+            role:
+              type: string
+              enum: [ADMIN, OPERATOR]
+              description: User role in the project
+          required:
+            - username
+            - password
+            - email
+            - role
+      required:
+        - project
+        - user
+
+    ProjectResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Project unique identifier
+        name:
+          type: string
+        description:
+          type: string
+        location:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        owner:
+          type: object
+          properties:
+            username:
+              type: string
+            email:
+              type: string
+            role:
+              type: string
+
+    StreetlightStatus:
+      type: object
+      properties:
+        streetlightId:
+          type: string
+        status:
+          type: string
+          enum: [ON, OFF]
+        lastUpdated:
+          type: string
+          format: date-time
+
+    ScheduleRequest:
+      type: object
+      properties:
+        season:
+          type: string
+          enum: [SUMMER, WINTER]
+        startTime:
+          type: string
+          format: time
+        endTime:
+          type: string
+          format: time
+      required:
+        - season
+        - startTime
+        - endTime
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer 
